@@ -1,17 +1,17 @@
 <?php
 /**
- * Plugin Name: MediaSweep
- * Plugin URI: https://github.com/emetrio-devs/mediasweep
- * Description: An efficient utility to clean up and sweep unneeded media files.
+ * Plugin Name: MediaCleanse
+ * Plugin URI: https://github.com/emetrio-devs/mediacleanse
+ * Description: An efficient utility to cleanse unused media files.
  * Version: 1.0.0
  * Author: Emetrio
  * Author URI: https://emetrio.com/
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: mediasweep
+ * Text Domain: mediacleanse
  * Domain Path: /languages
  *
- * @package MediaSweep
+ * @package MediaCleanse
  */
 
 if (!defined('ABSPATH')) {
@@ -24,9 +24,9 @@ if (!class_exists('WP_List_Table')) {
 }
 
 /**
- * MediaSweep List Table Class
+ * MediaCleanse List Table Class
  */
-class MediaSweep_List_Table extends WP_List_Table {
+class MediaCleanse_List_Table extends WP_List_Table {
 
     public function __construct() {
         parent::__construct([
@@ -39,11 +39,11 @@ class MediaSweep_List_Table extends WP_List_Table {
     public function get_columns() {
         return [
             'cb'     => '<input type="checkbox" />',
-            'file'   => __('File', 'mediasweep'),
-            'type'   => __('Type', 'mediasweep'),
-            'author' => __('Author', 'mediasweep'),
-            'size'   => __('File Size', 'mediasweep'),
-            'date'   => __('Uploaded Date', 'mediasweep'),
+            'file'   => __('File', 'mediacleanse'),
+            'type'   => __('Type', 'mediacleanse'),
+            'author' => __('Author', 'mediacleanse'),
+            'size'   => __('File Size', 'mediacleanse'),
+            'date'   => __('Uploaded Date', 'mediacleanse'),
         ];
     }
 
@@ -59,7 +59,7 @@ class MediaSweep_List_Table extends WP_List_Table {
     }
 
     protected function column_file($item) {
-        $delete_nonce = wp_create_nonce('mediasweep_delete_image');
+        $delete_nonce = wp_create_nonce('mediacleanse_delete_image');
         
         // $delete_url = sprintf(
         //     '?page=%s&action=%s&image_id=%s&_wpnonce=%s',
@@ -68,10 +68,10 @@ class MediaSweep_List_Table extends WP_List_Table {
         //     absint($item['ID']),
         //     $delete_nonce
         // );
-        $delete_url = admin_url('upload.php?page=mediasweep&action=delete&image_id=' . absint($item['ID']) . '&_wpnonce=' . $delete_nonce);
+        $delete_url = admin_url('upload.php?page=mediacleanse&action=delete&image_id=' . absint($item['ID']) . '&_wpnonce=' . $delete_nonce);
 
         $actions = [
-            'delete' => sprintf('<a href="%s" class="submitdelete" onclick="return confirm(\'Are you sure?\')">%s</a>', esc_url($delete_url), esc_html__('Delete Permanently', 'mediasweep')),
+            'delete' => sprintf('<a href="%s" class="submitdelete" onclick="return confirm(\'Are you sure?\')">%s</a>', esc_url($delete_url), esc_html__('Delete Permanently', 'mediacleanse')),
         ];
 
         $mime = get_post_mime_type($item['ID']);
@@ -120,30 +120,30 @@ class MediaSweep_List_Table extends WP_List_Table {
     }
 
     protected function get_bulk_actions() {
-        return ['bulk-delete' => esc_html__('Delete Permanently', 'mediasweep')];
+        return ['bulk-delete' => esc_html__('Delete Permanently', 'mediacleanse')];
     }
 
     protected function extra_tablenav($which) {
         if ($which === 'top') {
             // If a nonce exists on the page (bulk action form), verify it; read-only filters will continue to work.
-            if ( isset( $_REQUEST['mediasweep_bulk_nonce'] ) ) {
-                $bulk_nonce = sanitize_text_field( wp_unslash( $_REQUEST['mediasweep_bulk_nonce'] ) );
-                wp_verify_nonce( $bulk_nonce, 'mediasweep_bulk_delete' );
+            if ( isset( $_REQUEST['mediacleanse_bulk_nonce'] ) ) {
+                $bulk_nonce = sanitize_text_field( wp_unslash( $_REQUEST['mediacleanse_bulk_nonce'] ) );
+                wp_verify_nonce( $bulk_nonce, 'mediacleanse_bulk_delete' );
             }
             
             $selected = isset($_REQUEST['media_type']) ? sanitize_text_field(wp_unslash($_REQUEST['media_type'])) : '';
-            $filter_nonce = wp_create_nonce('mediasweep_filter');
+            $filter_nonce = wp_create_nonce('mediacleanse_filter');
             ?>
             <div class="alignleft actions">
                 <select name="media_type">
-                    <option value=""><?php esc_html_e('All Media Types', 'mediasweep'); ?></option>
-                    <option value="image" <?php selected($selected, 'image'); ?>><?php esc_html_e('Images', 'mediasweep'); ?></option>
-                    <option value="video" <?php selected($selected, 'video'); ?>><?php esc_html_e('Videos', 'mediasweep'); ?></option>
-                    <option value="audio" <?php selected($selected, 'audio'); ?>><?php esc_html_e('Audio', 'mediasweep'); ?></option>
-                    <option value="document" <?php selected($selected, 'document'); ?>><?php esc_html_e('Documents', 'mediasweep'); ?></option>
+                    <option value=""><?php esc_html_e('All Media Types', 'mediacleanse'); ?></option>
+                    <option value="image" <?php selected($selected, 'image'); ?>><?php esc_html_e('Images', 'mediacleanse'); ?></option>
+                    <option value="video" <?php selected($selected, 'video'); ?>><?php esc_html_e('Videos', 'mediacleanse'); ?></option>
+                    <option value="audio" <?php selected($selected, 'audio'); ?>><?php esc_html_e('Audio', 'mediacleanse'); ?></option>
+                    <option value="document" <?php selected($selected, 'document'); ?>><?php esc_html_e('Documents', 'mediacleanse'); ?></option>
                 </select>
-                <input type="hidden" name="mediasweep_filter_nonce" value="<?php echo esc_attr( $filter_nonce ); ?>" />
-                <?php submit_button(esc_html__('Filter', 'mediasweep'), 'button', 'filter_action', false); ?>
+                <input type="hidden" name="mediacleanse_filter_nonce" value="<?php echo esc_attr( $filter_nonce ); ?>" />
+                <?php submit_button(esc_html__('Filter', 'mediacleanse'), 'button', 'filter_action', false); ?>
             </div>
             <?php
         }
@@ -152,7 +152,7 @@ class MediaSweep_List_Table extends WP_List_Table {
     public function prepare_items() {
         $this->_column_headers = [$this->get_columns(), [], $this->get_sortable_columns()];
 
-        $unused_ids = MediaSweep_Plugin::get_unused_media_ids();
+        $unused_ids = MediaCleanse_Plugin::get_unused_media_ids();
         $data = [];
 
         foreach ($unused_ids as $id) {
@@ -164,17 +164,17 @@ class MediaSweep_List_Table extends WP_List_Table {
 
             $mime = get_post_mime_type($id);
             $type = 'document';
-            $type_label = esc_html__('Document', 'mediasweep');
+            $type_label = esc_html__('Document', 'mediacleanse');
             
             if (strpos($mime, 'image/') === 0) {
                 $type = 'image';
-                $type_label = esc_html__('Image', 'mediasweep');
+                $type_label = esc_html__('Image', 'mediacleanse');
             } elseif (strpos($mime, 'video/') === 0) {
                 $type = 'video';
-                $type_label = esc_html__('Video', 'mediasweep');
+                $type_label = esc_html__('Video', 'mediacleanse');
             } elseif (strpos($mime, 'audio/') === 0) {
                 $type = 'audio';
-                $type_label = esc_html__('Audio', 'mediasweep');
+                $type_label = esc_html__('Audio', 'mediacleanse');
             }
 
             $author_id = $post->post_author;
@@ -182,20 +182,20 @@ class MediaSweep_List_Table extends WP_List_Table {
 
             $data[] = [
                 'ID'         => $id,
-                'name'       => $post->post_title ? esc_html($post->post_title) : ($file_path ? esc_html(basename($file_path)) : esc_html__('Unknown File', 'mediasweep')),
+                'name'       => $post->post_title ? esc_html($post->post_title) : ($file_path ? esc_html(basename($file_path)) : esc_html__('Unknown File', 'mediacleanse')),
                 'filename'   => $file_path ? esc_html(basename($file_path)) : '',
                 'size'       => $size_string,
                 'date'       => get_the_date('Y-m-d H:i', $id),
                 'type'       => $type,
                 'type_label' => $type_label,
-                'author'     => $author_name ? esc_html($author_name) : esc_html__('Unknown', 'mediasweep'),
+                'author'     => $author_name ? esc_html($author_name) : esc_html__('Unknown', 'mediacleanse'),
             ];
         }
 
         // Handle Filter (verify filter nonce when filter button used)
         $media_type = '';
-        $filter_nonce = isset( $_REQUEST['mediasweep_filter_nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['mediasweep_filter_nonce'] ) ) : '';
-        if ( $filter_nonce && wp_verify_nonce( $filter_nonce, 'mediasweep_filter' ) ) {
+        $filter_nonce = isset( $_REQUEST['mediacleanse_filter_nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['mediacleanse_filter_nonce'] ) ) : '';
+        if ( $filter_nonce && wp_verify_nonce( $filter_nonce, 'mediacleanse_filter' ) ) {
             $media_type = isset( $_REQUEST['media_type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['media_type'] ) ) : '';
         } else {
             $media_type = '';
@@ -248,7 +248,7 @@ class MediaSweep_List_Table extends WP_List_Table {
 /**
  * Main Controller Setup
  */
-class MediaSweep_Plugin {
+class MediaCleanse_Plugin {
 
     public function __construct() {
         add_action('admin_menu', [$this, 'add_plugin_menu']);
@@ -257,43 +257,43 @@ class MediaSweep_Plugin {
 
         // Hooks for native Media Library integrations
         add_filter('wp_prepare_attachment_for_js', [$this, 'add_unused_status_to_js'], 10, 3);
-        add_action('admin_print_footer_scripts', [$this, 'print_media_library_assets'], 99);
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
         add_filter('attachment_fields_to_edit', [$this, 'add_unused_msg_to_details_sidebar'], 10, 2);
         add_filter('media_row_actions', [$this, 'add_unused_label_to_list_view'], 10, 2);
     }
 
     public function add_plugin_menu() {
         add_media_page(
-            esc_html__('MediaSweep | Emetrio', 'mediasweep'),
-            esc_html__('Media Sweep', 'mediasweep'),
+            esc_html__('MediaCleanse | Emetrio', 'mediacleanse'),
+            esc_html__('Media Cleanse', 'mediacleanse'),
             'delete_posts',
-            'mediasweep',
+            'mediacleanse',
             [$this, 'render_admin_page']
         );
     }
 
     public function handle_table_actions() {
-        if (!isset($_GET['page']) || $_GET['page'] !== 'mediasweep') return;
+        if (!isset($_GET['page']) || $_GET['page'] !== 'mediacleanse') return;
 
         // Ensure user has permission to delete posts
         if (!current_user_can('delete_posts')) {
-            wp_die(esc_html__('You do not have permission to perform this action.', 'mediasweep'));
+            wp_die(esc_html__('You do not have permission to perform this action.', 'mediacleanse'));
         }
 
         // Single delete (use wp_safe_redirect)
         if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] === 'delete' && isset( $_REQUEST['image_id'] ) ) {
-            check_admin_referer( 'mediasweep_delete_image' );
+            check_admin_referer( 'mediacleanse_delete_image' );
 
             wp_delete_attachment( absint( wp_unslash( $_REQUEST['image_id'] ) ), true );
             $this->clear_unused_cache();
 
-            wp_safe_redirect( admin_url( 'upload.php?page=mediasweep&message=deleted' ) );
+            wp_safe_redirect( admin_url( 'upload.php?page=mediacleanse&message=deleted' ) );
             exit;
         }
 
         // Bulk delete (normalize and sanitize array)
         if ( ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] === 'bulk-delete' ) || ( isset( $_REQUEST['action2'] ) && $_REQUEST['action2'] === 'bulk-delete' ) ) {
-            check_admin_referer( 'mediasweep_bulk_delete', 'mediasweep_bulk_nonce' );
+            check_admin_referer( 'mediacleanse_bulk_delete', 'mediacleanse_bulk_nonce' );
 
             $raw_bulk = isset( $_REQUEST['bulk-delete'] ) ? wp_unslash( $_REQUEST['bulk-delete'] ) : [];
             $bulk = is_array( $raw_bulk ) ? $raw_bulk : ( $raw_bulk ? [ $raw_bulk ] : [] );
@@ -303,7 +303,7 @@ class MediaSweep_Plugin {
             }
             $this->clear_unused_cache();
 
-            wp_safe_redirect( admin_url( 'upload.php?page=mediasweep&message=bulk_deleted' ) );
+            wp_safe_redirect( admin_url( 'upload.php?page=mediacleanse&message=bulk_deleted' ) );
             exit;
         }
     }
@@ -312,7 +312,7 @@ class MediaSweep_Plugin {
      * Clear the unused images cache transient
      */
     public function clear_unused_cache() {
-        delete_transient('mediasweep_unused_ids');
+        delete_transient('mediacleanse_unused_ids');
     }
 
     /**
@@ -321,7 +321,7 @@ class MediaSweep_Plugin {
     public static function get_unused_media_ids() {
         global $wpdb;
 
-        $unused_ids = get_transient('mediasweep_unused_ids');
+        $unused_ids = get_transient('mediacleanse_unused_ids');
         if (false !== $unused_ids) {
             return $unused_ids;
         }
@@ -336,7 +336,7 @@ class MediaSweep_Plugin {
         $all_media = array_map('intval', (array) $all_media);
 
         if (empty($all_media)) {
-            set_transient('mediasweep_unused_ids', [], 12 * HOUR_IN_SECONDS);
+            set_transient('mediacleanse_unused_ids', [], 12 * HOUR_IN_SECONDS);
             return [];
         }
 
@@ -380,7 +380,7 @@ class MediaSweep_Plugin {
         $potential_unused_ids = array_diff($all_media, $used_ids);
 
         if (empty($potential_unused_ids)) {
-            set_transient('mediasweep_unused_ids', [], 12 * HOUR_IN_SECONDS);
+            set_transient('mediacleanse_unused_ids', [], 12 * HOUR_IN_SECONDS);
             return [];
         }
 
@@ -406,7 +406,7 @@ class MediaSweep_Plugin {
 
         // Cast to integers to support strict type comparison in in_array checks
         $final_unused_ids = array_map('intval', $final_unused_ids);
-        set_transient('mediasweep_unused_ids', $final_unused_ids, 12 * HOUR_IN_SECONDS);
+        set_transient('mediacleanse_unused_ids', $final_unused_ids, 12 * HOUR_IN_SECONDS);
 
         return $final_unused_ids;
     }
@@ -431,104 +431,45 @@ class MediaSweep_Plugin {
      * Print CSS and Backbone JavaScript adjustments directly in the admin footer.
      * This is 100% foolproof and avoids script dependency issues across different pages.
      */
-    public function print_media_library_assets() {
-        ?>
-        <style>
-            /* Grid View: Gold Dot Indicator & Border */
-            /* .attachments .attachment-preview.mediasweep-unused-item {
-                box-shadow: inset 0 0 20px 3px rgba(255, 215, 0, 0.25) !important;
-            } */
-            .attachments .attachment-preview.mediasweep-unused-item .filename,
-            .attachments li.attachment:has(div.mediasweep-unused-item)::after {
-                background-color: #ffd7004d !important;
-                color: #000 !important;
-            }
-            .attachments .attachment-preview.mediasweep-unused-item::after {
-                content: '' !important;
-                position: absolute !important;
-                top: 10px !important;
-                right: 10px !important;
-                left: auto !important; /* Force reset left to override core styles */
-                width: 10px !important; /* Force exact width */
-                height: 10px !important; /* Force exact height */
-                background-color: #ffd700 !important;
-                border: none !important;
-                border-radius: 50% !important;
-                z-index: 9999 !important;
-                box-shadow: 0 0 4px rgba(0, 0, 0, 0.5) !important;
-                pointer-events: none !important;
-                display: block !important;
-            }
-            /* Style override for attachment details sidebar field */
-            .compat-field-mediasweep_status td {
-                vertical-align: middle;
-            }
-        </style>
-        <script>
-            (function($) {
-                // Method 1: Modify the Backbone script template before initialization
-                function patchAttachmentTemplate() {
-                    var $template = $('#tmpl-attachment');
-                    if ($template.length) {
-                        var html = $template.html();
-                        if (html && html.indexOf('mediasweep-unused-item') === -1) {
-                            html = html.replace(
-                                'class="attachment-preview',
-                                'class="attachment-preview <# if ( data.is_unused ) { #>mediasweep-unused-item<# } #>'
-                            );
-                            $template.html(html);
-                        }
-                    }
-                }
+    public function enqueue_admin_assets() {
+        if ( ! function_exists( 'get_current_screen' ) ) {
+            return;
+        }
 
-                // Method 2: Fallback direct prototype override (targeting .attachment-preview)
-                function initMediaSweepGrid() {
-                    if (typeof wp !== 'undefined' && wp.media && wp.media.view && wp.media.view.Attachment) {
-                        var originalRender = wp.media.view.Attachment.prototype.render;
-                        wp.media.view.Attachment.prototype.render = function() {
-                            originalRender.apply(this, arguments);
-                            if (this.model.get('is_unused')) {
-                                this.$el.find('.attachment-preview').addClass('mediasweep-unused-item');
-                                this.$el.attr('title', '<?php echo esc_js(esc_html__('Unused media', 'mediasweep')); ?>');
-                            }
-                        };
+        $screen = get_current_screen();
+        $is_media_screen = $screen && ( 'upload' === $screen->id || false !== strpos( $screen->id, 'media' ) );
+        $is_plugin_page  = isset( $_GET['page'] ) && 'mediacleanse' === $_GET['page'];
 
-                        if (wp.media.view.Attachment.Library) {
-                            var originalLibRender = wp.media.view.Attachment.Library.prototype.render;
-                            wp.media.view.Attachment.Library.prototype.render = function() {
-                                originalLibRender.apply(this, arguments);
-                                if (this.model.get('is_unused')) {
-                                    this.$el.find('.attachment-preview').addClass('mediasweep-unused-item');
-                                    this.$el.attr('title', '<?php echo esc_js(esc_html__('Unused media', 'mediasweep')); ?>');
-                                }
-                            };
-                        }
-                        return true;
-                    }
-                    return false;
-                }
+        if ( ! $is_media_screen && ! $is_plugin_page ) {
+            return;
+        }
 
-                // Execute immediately and on document ready
-                patchAttachmentTemplate();
-                initMediaSweepGrid();
+        $dir     = plugin_dir_path( __FILE__ );
+        $css_rel = 'admin/css/mediacleanse-admin.css';
+        $js_rel  = 'admin/js/mediacleanse-admin.js';
 
-                $(document).ready(function() {
-                    patchAttachmentTemplate();
-                    initMediaSweepGrid();
-                });
+        // Enqueue admin CSS
+        wp_enqueue_style(
+            'mediacleanse-admin',
+            plugins_url( $css_rel, __FILE__ ),
+            [],
+            file_exists( $dir . $css_rel ) ? filemtime( $dir . $css_rel ) : false
+        );
 
-                // Polling fallback to capture late-loading scripts
-                var attempts = 0;
-                var interval = setInterval(function() {
-                    attempts++;
-                    patchAttachmentTemplate();
-                    if (initMediaSweepGrid() || attempts > 30) {
-                        clearInterval(interval);
-                    }
-                }, 100);
-            })(jQuery);
-        </script>
-        <?php
+        // Enqueue admin JS (depend on media-views)
+        wp_enqueue_script(
+            'mediacleanse-admin',
+            plugins_url( $js_rel, __FILE__ ),
+            [ 'jquery', 'media-views' ],
+            file_exists( $dir . $js_rel ) ? filemtime( $dir . $js_rel ) : false,
+            true
+        );
+
+        // Localize strings to avoid PHP in JS
+        wp_localize_script( 'mediacleanse-admin', 'MediaCleanseL10n', [
+            'unusedText'    => __( 'Unused media', 'mediacleanse' ),
+            'confirmDelete' => __( 'Are you sure?', 'mediacleanse' ),
+        ] );
     }
 
     /**
@@ -536,9 +477,9 @@ class MediaSweep_Plugin {
      */
     public function add_unused_label_to_list_view($actions, $post) {
         if (self::is_media_unused($post->ID)) {
-            $actions['mediasweep_status'] = sprintf(
+            $actions['mediacleanse_status'] = sprintf(
                 '<span style="color: #ffd700; font-weight: 500; font-size: 13px; pointer-events: none; display: inline-block; margin-top: 4px;">%s</span>',
-                esc_html__( 'Unused Media', 'mediasweep' )
+                esc_html__( 'Unused Media', 'mediacleanse' )
             );
         }
         return $actions;
@@ -549,12 +490,12 @@ class MediaSweep_Plugin {
      */
     public function add_unused_msg_to_details_sidebar($form_fields, $post) {
         if (self::is_media_unused($post->ID)) {
-            $form_fields['mediasweep_status'] = [
-                'label' => esc_html__( 'Media Sweep:', 'mediasweep' ),
+            $form_fields['mediacleanse_status'] = [
+                'label' => esc_html__( 'Media Cleanse:', 'mediacleanse' ),
                 'input' => 'html',
                 'html'  => sprintf(
                     '<span style="border-left: 4px solid #ffd700; background: #ffd7001a; padding: 6px 10px; display: inline-block;">%s</span>',
-                    esc_html__( 'Media is not in use, can be swept.', 'mediasweep' )
+                    esc_html__( 'Media is not in use, can be cleaned.', 'mediacleanse' )
                 ),
             ];
         }
@@ -563,12 +504,12 @@ class MediaSweep_Plugin {
 
     public function render_admin_page() {
         $this->clear_unused_cache();
-        $table = new MediaSweep_List_Table();
+        $table = new MediaCleanse_List_Table();
         $table->prepare_items();
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline"><?php esc_html_e('Media Sweep | Emetrio', 'mediasweep'); ?></h1>
-            <p class="notice notice-warning inline"><strong><?php esc_html_e('Media Sweep Notice:', 'mediasweep'); ?></strong> <?php esc_html_e('For safety, please make a full backup of your website and media library before executing any deletions. Deleted media items are permanently removed and cannot be recovered.', 'mediasweep'); ?></p>
+            <h1 class="wp-heading-inline"><?php esc_html_e('Media Cleanse | Emetrio', 'mediacleanse'); ?></h1>
+            <p class="notice notice-warning inline"><strong><?php esc_html_e('Media Cleanse Notice:', 'mediacleanse'); ?></strong> <?php esc_html_e('For safety, please make a full backup of your website and media library before executing any deletions. Deleted media items are permanently removed and cannot be recovered.', 'mediacleanse'); ?></p>
 
             <?php
             $message = isset( $_GET['message'] ) ? sanitize_text_field( wp_unslash( $_GET['message'] ) ) : '';
@@ -576,18 +517,18 @@ class MediaSweep_Plugin {
                 <div id="message" class="updated notice is-dismissible"><p>
                     <?php
                         if ( 'deleted' === $message ) {
-                            esc_html_e( 'Item permanently removed.', 'mediasweep' );
+                            esc_html_e( 'Item permanently removed.', 'mediacleanse' );
                         } elseif ( 'bulk_deleted' === $message ) {
-                            esc_html_e( 'Selected items permanently removed.', 'mediasweep' );
+                            esc_html_e( 'Selected items permanently removed.', 'mediacleanse' );
                         }
                     ?>
                 </p></div>
             <?php endif; ?>
 
             <form method="get" action="">
-                <input type="hidden" name="page" value="mediasweep" />
-                <?php wp_nonce_field('mediasweep_bulk_delete', 'mediasweep_bulk_nonce'); ?>
-                <?php $table->search_box(esc_html__('Search Media', 'mediasweep'), 'search_id'); ?>
+                <input type="hidden" name="page" value="mediacleanse" />
+                <?php wp_nonce_field('mediacleanse_bulk_delete', 'mediacleanse_bulk_nonce'); ?>
+                <?php $table->search_box(esc_html__('Search Media', 'mediacleanse'), 'search_id'); ?>
                 <?php $table->display(); ?>
             </form>
         </div>
@@ -595,4 +536,4 @@ class MediaSweep_Plugin {
     }
 }
 
-new MediaSweep_Plugin();
+new MediaCleanse_Plugin();
