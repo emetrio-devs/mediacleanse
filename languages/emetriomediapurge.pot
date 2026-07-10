@@ -1,0 +1,138 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: EmetrioMediaPurge 1.0.0\n"
+"POT-Creation-Date: 2026-07-10 00:00+0000\n"
+"PO-Revision-Date: 2026-07-10 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: emetriomediapurge.php:42
+msgid "File"
+msgstr ""
+
+#: emetriomediapurge.php:43
+msgid "Type"
+msgstr ""
+
+#: emetriomediapurge.php:44
+msgid "Author"
+msgstr ""
+
+#: emetriomediapurge.php:45
+msgid "File Size"
+msgstr ""
+
+#: emetriomediapurge.php:46
+msgid "Uploaded Date"
+msgstr ""
+
+#: emetriomediapurge.php:74
+#: emetriomediapurge.php:123
+msgid "Delete Permanently"
+msgstr ""
+
+#: emetriomediapurge.php:139
+msgid "All Media Types"
+msgstr ""
+
+#: emetriomediapurge.php:140
+msgid "Images"
+msgstr ""
+
+#: emetriomediapurge.php:141
+msgid "Videos"
+msgstr ""
+
+#: emetriomediapurge.php:142
+#: emetriomediapurge.php:177
+msgid "Audio"
+msgstr ""
+
+#: emetriomediapurge.php:143
+msgid "Documents"
+msgstr ""
+
+#: emetriomediapurge.php:146
+msgid "Filter"
+msgstr ""
+
+#: emetriomediapurge.php:167
+msgid "Document"
+msgstr ""
+
+#: emetriomediapurge.php:171
+msgid "Image"
+msgstr ""
+
+#: emetriomediapurge.php:174
+msgid "Video"
+msgstr ""
+
+#: emetriomediapurge.php:185
+msgid "Unknown File"
+msgstr ""
+
+#: emetriomediapurge.php:191
+msgid "Unknown"
+msgstr ""
+
+#: emetriomediapurge.php:267
+msgid "EmetrioMediaPurge | Emetrio"
+msgstr ""
+
+#: emetriomediapurge.php:268
+msgid "Emetrio Media Purge"
+msgstr ""
+
+#: emetriomediapurge.php:277
+msgid "You do not have permission to perform this action."
+msgstr ""
+
+#: emetriomediapurge.php:474
+msgid "Unused media"
+msgstr ""
+
+#: emetriomediapurge.php:475
+msgid "Are you sure?"
+msgstr ""
+
+#: emetriomediapurge.php:482
+msgid "Unused Media"
+msgstr ""
+
+#: emetriomediapurge.php:492
+msgid "Emetrio Media Purge:"
+msgstr ""
+
+#: emetriomediapurge.php:495
+msgid "Media is not in use, can be cleaned."
+msgstr ""
+
+#: emetriomediapurge.php:510
+msgid "Emetrio Media Purge | Emetrio"
+msgstr ""
+
+#: emetriomediapurge.php:511
+msgid "Emetrio Media Purge Notice:"
+msgstr ""
+
+#: emetriomediapurge.php:511
+msgid "For safety, please make a full backup of your website and media library before executing any deletions. Deleted media items are permanently removed and cannot be recovered."
+msgstr ""
+
+#: emetriomediapurge.php:518
+msgid "Item permanently removed."
+msgstr ""
+
+#: emetriomediapurge.php:520
+msgid "Selected items permanently removed."
+msgstr ""
+
+#: emetriomediapurge.php:529
+msgid "Search Media"
+msgstr ""

@@ -4,6 +4,6 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 // Remove transient used for caching scan results.
-delete_transient( 'mediacleanse_unused_ids' );
+delete_transient( 'emetriomediapurge_unused_ids' );
 
 // If you later add plugin options, remove them here using delete_option().

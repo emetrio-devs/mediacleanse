@@ -1,13 +1,13 @@
 /* Grid View: Gold Dot Indicator & Border */
-/* .attachments .attachment-preview.mediacleanse-unused-item {
+/* .attachments .attachment-preview.emetriomediapurge-unused-item {
     box-shadow: inset 0 0 20px 3px rgba(255, 215, 0, 0.25) !important;
 } */
-.attachments .attachment-preview.mediacleanse-unused-item .filename,
-.attachments li.attachment:has(div.mediacleanse-unused-item)::after {
+.attachments .attachment-preview.emetriomediapurge-unused-item .filename,
+.attachments li.attachment:has(div.emetriomediapurge-unused-item)::after {
     background-color: #ffd7004d !important;
     color: #000 !important;
 }
-.attachments .attachment-preview.mediacleanse-unused-item::after {
+.attachments .attachment-preview.emetriomediapurge-unused-item::after {
     content: '' !important;
     position: absolute !important;
     top: 10px !important;
@@ -24,6 +24,6 @@
     display: block !important;
 }
 /* Style override for attachment details sidebar field */
-.compat-field-mediacleanse_status td {
+.compat-field-emetriomediapurge_status td {
     vertical-align: middle;
 }

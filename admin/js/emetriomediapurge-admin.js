@@ -4,10 +4,10 @@
         var $template = $('#tmpl-attachment');
         if ($template.length) {
             var html = $template.html();
-            if (html && html.indexOf('mediacleanse-unused-item') === -1) {
+            if (html && html.indexOf('emetriomediapurge-unused-item') === -1) {
                 html = html.replace(
                     'class="attachment-preview',
-                    'class="attachment-preview <# if ( data.is_unused ) { #>mediacleanse-unused-item<# } #>'
+                    'class="attachment-preview <# if ( data.is_unused ) { #>emetriomediapurge-unused-item<# } #>'
                 );
                 $template.html(html);
             }
@@ -15,14 +15,14 @@
     }
     
     // Method 2: Fallback direct prototype override (targeting .attachment-preview)
-    function initMediaCleanseGrid() {
+    function initEmetrioMediaPurgeGrid() {
         if (typeof wp !== 'undefined' && wp.media && wp.media.view && wp.media.view.Attachment) {
             var originalRender = wp.media.view.Attachment.prototype.render;
             wp.media.view.Attachment.prototype.render = function() {
                 originalRender.apply(this, arguments);
                 if (this.model.get('is_unused')) {
-                    this.$el.find('.attachment-preview').addClass('mediacleanse-unused-item');
-                    this.$el.attr('title', MediaCleanseL10n.unusedText );
+                    this.$el.find('.attachment-preview').addClass('emetriomediapurge-unused-item');
+                    this.$el.attr('title', EmetrioMediaPurgeL10n.unusedText );
                 }
             };
 
@@ -31,8 +31,8 @@
                 wp.media.view.Attachment.Library.prototype.render = function() {
                     originalLibRender.apply(this, arguments);
                     if (this.model.get('is_unused')) {
-                        this.$el.find('.attachment-preview').addClass('mediacleanse-unused-item');
-                        this.$el.attr('title', MediaCleanseL10n.unusedText );
+                        this.$el.find('.attachment-preview').addClass('emetriomediapurge-unused-item');
+                        this.$el.attr('title', EmetrioMediaPurgeL10n.unusedText );
                     }
                 };
             }
@@ -43,11 +43,11 @@
 
     // Execute immediately and on document ready
     patchAttachmentTemplate();
-    initMediaCleanseGrid();
+    initEmetrioMediaPurgeGrid();
 
     $(document).ready(function(){
         patchAttachmentTemplate();
-        initMediaCleanseGrid();
+        initEmetrioMediaPurgeGrid();
     });
 
     // Polling fallback to capture late-loading scripts
@@ -55,6 +55,6 @@
     var interval = setInterval(function(){
         attempts++;
         patchAttachmentTemplate();
-        if (initMediaCleanseGrid() || attempts > 30) clearInterval(interval);
+        if (initEmetrioMediaPurgeGrid() || attempts > 30) clearInterval(interval);
     }, 100);
 })(jQuery);

@@ -1,17 +1,17 @@
 <?php
 /**
- * Plugin Name: MediaCleanse
- * Plugin URI: https://github.com/emetrio-devs/mediacleanse
- * Description: An efficient utility to cleanse unused media files.
+ * Plugin Name: Emetrio Media Purge
+ * Plugin URI: https://github.com/emetrio-devs/emetriomediapurge
+ * Description: An efficient utility to clean unused media files.
  * Version: 1.0.0
  * Author: Emetrio
  * Author URI: https://emetrio.com/
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: mediacleanse
+ * Text Domain: emetriomediapurge
  * Domain Path: /languages
  *
- * @package MediaCleanse
+ * @package EmetrioMediaPurge
  */
 
 if (!defined('ABSPATH')) {
@@ -24,9 +24,9 @@ if (!class_exists('WP_List_Table')) {
 }
 
 /**
- * MediaCleanse List Table Class
+ * EmetrioMediaPurge List Table Class
  */
-class MediaCleanse_List_Table extends WP_List_Table {
+class EmetrioMediaPurge_List_Table extends WP_List_Table {
 
     public function __construct() {
         parent::__construct([
@@ -39,11 +39,11 @@ class MediaCleanse_List_Table extends WP_List_Table {
     public function get_columns() {
         return [
             'cb'     => '<input type="checkbox" />',
-            'file'   => __('File', 'mediacleanse'),
-            'type'   => __('Type', 'mediacleanse'),
-            'author' => __('Author', 'mediacleanse'),
-            'size'   => __('File Size', 'mediacleanse'),
-            'date'   => __('Uploaded Date', 'mediacleanse'),
+            'file'   => __('File', 'emetriomediapurge'),
+            'type'   => __('Type', 'emetriomediapurge'),
+            'author' => __('Author', 'emetriomediapurge'),
+            'size'   => __('File Size', 'emetriomediapurge'),
+            'date'   => __('Uploaded Date', 'emetriomediapurge'),
         ];
     }
 
@@ -59,7 +59,7 @@ class MediaCleanse_List_Table extends WP_List_Table {
     }
 
     protected function column_file($item) {
-        $delete_nonce = wp_create_nonce('mediacleanse_delete_image');
+        $delete_nonce = wp_create_nonce('emetriomediapurge_delete_image');
         
         // $delete_url = sprintf(
         //     '?page=%s&action=%s&image_id=%s&_wpnonce=%s',
@@ -68,10 +68,10 @@ class MediaCleanse_List_Table extends WP_List_Table {
         //     absint($item['ID']),
         //     $delete_nonce
         // );
-        $delete_url = admin_url('upload.php?page=mediacleanse&action=delete&image_id=' . absint($item['ID']) . '&_wpnonce=' . $delete_nonce);
+        $delete_url = admin_url('upload.php?page=emetriomediapurge&action=delete&image_id=' . absint($item['ID']) . '&_wpnonce=' . $delete_nonce);
 
         $actions = [
-            'delete' => sprintf('<a href="%s" class="submitdelete" onclick="return confirm(\'Are you sure?\')">%s</a>', esc_url($delete_url), esc_html__('Delete Permanently', 'mediacleanse')),
+            'delete' => sprintf('<a href="%s" class="submitdelete" onclick="return confirm(\'Are you sure?\')">%s</a>', esc_url($delete_url), esc_html__('Delete Permanently', 'emetriomediapurge')),
         ];
 
         $mime = get_post_mime_type($item['ID']);
@@ -120,30 +120,30 @@ class MediaCleanse_List_Table extends WP_List_Table {
     }
 
     protected function get_bulk_actions() {
-        return ['bulk-delete' => esc_html__('Delete Permanently', 'mediacleanse')];
+        return ['bulk-delete' => esc_html__('Delete Permanently', 'emetriomediapurge')];
     }
 
     protected function extra_tablenav($which) {
         if ($which === 'top') {
             // If a nonce exists on the page (bulk action form), verify it; read-only filters will continue to work.
-            if ( isset( $_REQUEST['mediacleanse_bulk_nonce'] ) ) {
-                $bulk_nonce = sanitize_text_field( wp_unslash( $_REQUEST['mediacleanse_bulk_nonce'] ) );
-                wp_verify_nonce( $bulk_nonce, 'mediacleanse_bulk_delete' );
+            if ( isset( $_REQUEST['emetriomediapurge_bulk_nonce'] ) ) {
+                $bulk_nonce = sanitize_text_field( wp_unslash( $_REQUEST['emetriomediapurge_bulk_nonce'] ) );
+                wp_verify_nonce( $bulk_nonce, 'emetriomediapurge_bulk_delete' );
             }
             
             $selected = isset($_REQUEST['media_type']) ? sanitize_text_field(wp_unslash($_REQUEST['media_type'])) : '';
-            $filter_nonce = wp_create_nonce('mediacleanse_filter');
+            $filter_nonce = wp_create_nonce('emetriomediapurge_filter');
             ?>
             <div class="alignleft actions">
                 <select name="media_type">
-                    <option value=""><?php esc_html_e('All Media Types', 'mediacleanse'); ?></option>
-                    <option value="image" <?php selected($selected, 'image'); ?>><?php esc_html_e('Images', 'mediacleanse'); ?></option>
-                    <option value="video" <?php selected($selected, 'video'); ?>><?php esc_html_e('Videos', 'mediacleanse'); ?></option>
-                    <option value="audio" <?php selected($selected, 'audio'); ?>><?php esc_html_e('Audio', 'mediacleanse'); ?></option>
-                    <option value="document" <?php selected($selected, 'document'); ?>><?php esc_html_e('Documents', 'mediacleanse'); ?></option>
+                    <option value=""><?php esc_html_e('All Media Types', 'emetriomediapurge'); ?></option>
+                    <option value="image" <?php selected($selected, 'image'); ?>><?php esc_html_e('Images', 'emetriomediapurge'); ?></option>
+                    <option value="video" <?php selected($selected, 'video'); ?>><?php esc_html_e('Videos', 'emetriomediapurge'); ?></option>
+                    <option value="audio" <?php selected($selected, 'audio'); ?>><?php esc_html_e('Audio', 'emetriomediapurge'); ?></option>
+                    <option value="document" <?php selected($selected, 'document'); ?>><?php esc_html_e('Documents', 'emetriomediapurge'); ?></option>
                 </select>
-                <input type="hidden" name="mediacleanse_filter_nonce" value="<?php echo esc_attr( $filter_nonce ); ?>" />
-                <?php submit_button(esc_html__('Filter', 'mediacleanse'), 'button', 'filter_action', false); ?>
+                <input type="hidden" name="emetriomediapurge_filter_nonce" value="<?php echo esc_attr( $filter_nonce ); ?>" />
+                <?php submit_button(esc_html__('Filter', 'emetriomediapurge'), 'button', 'filter_action', false); ?>
             </div>
             <?php
         }
@@ -152,7 +152,7 @@ class MediaCleanse_List_Table extends WP_List_Table {
     public function prepare_items() {
         $this->_column_headers = [$this->get_columns(), [], $this->get_sortable_columns()];
 
-        $unused_ids = MediaCleanse_Plugin::get_unused_media_ids();
+        $unused_ids = EmetrioMediaPurge_Plugin::get_unused_media_ids();
         $data = [];
 
         foreach ($unused_ids as $id) {
@@ -164,17 +164,17 @@ class MediaCleanse_List_Table extends WP_List_Table {
 
             $mime = get_post_mime_type($id);
             $type = 'document';
-            $type_label = esc_html__('Document', 'mediacleanse');
+            $type_label = esc_html__('Document', 'emetriomediapurge');
             
             if (strpos($mime, 'image/') === 0) {
                 $type = 'image';
-                $type_label = esc_html__('Image', 'mediacleanse');
+                $type_label = esc_html__('Image', 'emetriomediapurge');
             } elseif (strpos($mime, 'video/') === 0) {
                 $type = 'video';
-                $type_label = esc_html__('Video', 'mediacleanse');
+                $type_label = esc_html__('Video', 'emetriomediapurge');
             } elseif (strpos($mime, 'audio/') === 0) {
                 $type = 'audio';
-                $type_label = esc_html__('Audio', 'mediacleanse');
+                $type_label = esc_html__('Audio', 'emetriomediapurge');
             }
 
             $author_id = $post->post_author;
@@ -182,20 +182,20 @@ class MediaCleanse_List_Table extends WP_List_Table {
 
             $data[] = [
                 'ID'         => $id,
-                'name'       => $post->post_title ? esc_html($post->post_title) : ($file_path ? esc_html(basename($file_path)) : esc_html__('Unknown File', 'mediacleanse')),
+                'name'       => $post->post_title ? esc_html($post->post_title) : ($file_path ? esc_html(basename($file_path)) : esc_html__('Unknown File', 'emetriomediapurge')),
                 'filename'   => $file_path ? esc_html(basename($file_path)) : '',
                 'size'       => $size_string,
                 'date'       => get_the_date('Y-m-d H:i', $id),
                 'type'       => $type,
                 'type_label' => $type_label,
-                'author'     => $author_name ? esc_html($author_name) : esc_html__('Unknown', 'mediacleanse'),
+                'author'     => $author_name ? esc_html($author_name) : esc_html__('Unknown', 'emetriomediapurge'),
             ];
         }
 
         // Handle Filter (verify filter nonce when filter button used)
         $media_type = '';
-        $filter_nonce = isset( $_REQUEST['mediacleanse_filter_nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['mediacleanse_filter_nonce'] ) ) : '';
-        if ( $filter_nonce && wp_verify_nonce( $filter_nonce, 'mediacleanse_filter' ) ) {
+        $filter_nonce = isset( $_REQUEST['emetriomediapurge_filter_nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['emetriomediapurge_filter_nonce'] ) ) : '';
+        if ( $filter_nonce && wp_verify_nonce( $filter_nonce, 'emetriomediapurge_filter' ) ) {
             $media_type = isset( $_REQUEST['media_type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['media_type'] ) ) : '';
         } else {
             $media_type = '';
@@ -248,7 +248,7 @@ class MediaCleanse_List_Table extends WP_List_Table {
 /**
  * Main Controller Setup
  */
-class MediaCleanse_Plugin {
+class EmetrioMediaPurge_Plugin {
 
     public function __construct() {
         add_action('admin_menu', [$this, 'add_plugin_menu']);
@@ -264,36 +264,36 @@ class MediaCleanse_Plugin {
 
     public function add_plugin_menu() {
         add_media_page(
-            esc_html__('MediaCleanse | Emetrio', 'mediacleanse'),
-            esc_html__('Media Cleanse', 'mediacleanse'),
+            esc_html__('EmetrioMediaPurge | Emetrio', 'emetriomediapurge'),
+            esc_html__('Emetrio Media Purge', 'emetriomediapurge'),
             'delete_posts',
-            'mediacleanse',
+            'emetriomediapurge',
             [$this, 'render_admin_page']
         );
     }
 
     public function handle_table_actions() {
-        if (!isset($_GET['page']) || $_GET['page'] !== 'mediacleanse') return;
+        if (!isset($_GET['page']) || $_GET['page'] !== 'emetriomediapurge') return;
 
         // Ensure user has permission to delete posts
         if (!current_user_can('delete_posts')) {
-            wp_die(esc_html__('You do not have permission to perform this action.', 'mediacleanse'));
+            wp_die(esc_html__('You do not have permission to perform this action.', 'emetriomediapurge'));
         }
 
         // Single delete (use wp_safe_redirect)
         if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] === 'delete' && isset( $_REQUEST['image_id'] ) ) {
-            check_admin_referer( 'mediacleanse_delete_image' );
+            check_admin_referer( 'emetriomediapurge_delete_image' );
 
             wp_delete_attachment( absint( wp_unslash( $_REQUEST['image_id'] ) ), true );
             $this->clear_unused_cache();
 
-            wp_safe_redirect( admin_url( 'upload.php?page=mediacleanse&message=deleted' ) );
+            wp_safe_redirect( admin_url( 'upload.php?page=emetriomediapurge&message=deleted' ) );
             exit;
         }
 
         // Bulk delete (normalize and sanitize array)
         if ( ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] === 'bulk-delete' ) || ( isset( $_REQUEST['action2'] ) && $_REQUEST['action2'] === 'bulk-delete' ) ) {
-            check_admin_referer( 'mediacleanse_bulk_delete', 'mediacleanse_bulk_nonce' );
+            check_admin_referer( 'emetriomediapurge_bulk_delete', 'emetriomediapurge_bulk_nonce' );
 
             $raw_bulk = isset( $_REQUEST['bulk-delete'] ) ? wp_unslash( $_REQUEST['bulk-delete'] ) : [];
             $bulk = is_array( $raw_bulk ) ? $raw_bulk : ( $raw_bulk ? [ $raw_bulk ] : [] );
@@ -303,7 +303,7 @@ class MediaCleanse_Plugin {
             }
             $this->clear_unused_cache();
 
-            wp_safe_redirect( admin_url( 'upload.php?page=mediacleanse&message=bulk_deleted' ) );
+            wp_safe_redirect( admin_url( 'upload.php?page=emetriomediapurge&message=bulk_deleted' ) );
             exit;
         }
     }
@@ -312,7 +312,7 @@ class MediaCleanse_Plugin {
      * Clear the unused images cache transient
      */
     public function clear_unused_cache() {
-        delete_transient('mediacleanse_unused_ids');
+        delete_transient('emetriomediapurge_unused_ids');
     }
 
     /**
@@ -321,7 +321,7 @@ class MediaCleanse_Plugin {
     public static function get_unused_media_ids() {
         global $wpdb;
 
-        $unused_ids = get_transient('mediacleanse_unused_ids');
+        $unused_ids = get_transient('emetriomediapurge_unused_ids');
         if (false !== $unused_ids) {
             return $unused_ids;
         }
@@ -336,7 +336,7 @@ class MediaCleanse_Plugin {
         $all_media = array_map('intval', (array) $all_media);
 
         if (empty($all_media)) {
-            set_transient('mediacleanse_unused_ids', [], 12 * HOUR_IN_SECONDS);
+            set_transient('emetriomediapurge_unused_ids', [], 12 * HOUR_IN_SECONDS);
             return [];
         }
 
@@ -380,7 +380,7 @@ class MediaCleanse_Plugin {
         $potential_unused_ids = array_diff($all_media, $used_ids);
 
         if (empty($potential_unused_ids)) {
-            set_transient('mediacleanse_unused_ids', [], 12 * HOUR_IN_SECONDS);
+            set_transient('emetriomediapurge_unused_ids', [], 12 * HOUR_IN_SECONDS);
             return [];
         }
 
@@ -406,7 +406,7 @@ class MediaCleanse_Plugin {
 
         // Cast to integers to support strict type comparison in in_array checks
         $final_unused_ids = array_map('intval', $final_unused_ids);
-        set_transient('mediacleanse_unused_ids', $final_unused_ids, 12 * HOUR_IN_SECONDS);
+        set_transient('emetriomediapurge_unused_ids', $final_unused_ids, 12 * HOUR_IN_SECONDS);
 
         return $final_unused_ids;
     }
@@ -438,19 +438,19 @@ class MediaCleanse_Plugin {
 
         $screen = get_current_screen();
         $is_media_screen = $screen && ( 'upload' === $screen->id || false !== strpos( $screen->id, 'media' ) );
-        $is_plugin_page  = isset( $_GET['page'] ) && 'mediacleanse' === $_GET['page'];
+        $is_plugin_page  = isset( $_GET['page'] ) && 'emetriomediapurge' === $_GET['page'];
 
         if ( ! $is_media_screen && ! $is_plugin_page ) {
             return;
         }
 
         $dir     = plugin_dir_path( __FILE__ );
-        $css_rel = 'admin/css/mediacleanse-admin.css';
-        $js_rel  = 'admin/js/mediacleanse-admin.js';
+        $css_rel = 'admin/css/emetriomediapurge-admin.css';
+        $js_rel  = 'admin/js/emetriomediapurge-admin.js';
 
         // Enqueue admin CSS
         wp_enqueue_style(
-            'mediacleanse-admin',
+            'emetriomediapurge-admin',
             plugins_url( $css_rel, __FILE__ ),
             [],
             file_exists( $dir . $css_rel ) ? filemtime( $dir . $css_rel ) : false
@@ -458,7 +458,7 @@ class MediaCleanse_Plugin {
 
         // Enqueue admin JS (depend on media-views)
         wp_enqueue_script(
-            'mediacleanse-admin',
+            'emetriomediapurge-admin',
             plugins_url( $js_rel, __FILE__ ),
             [ 'jquery', 'media-views' ],
             file_exists( $dir . $js_rel ) ? filemtime( $dir . $js_rel ) : false,
@@ -466,9 +466,9 @@ class MediaCleanse_Plugin {
         );
 
         // Localize strings to avoid PHP in JS
-        wp_localize_script( 'mediacleanse-admin', 'MediaCleanseL10n', [
-            'unusedText'    => __( 'Unused media', 'mediacleanse' ),
-            'confirmDelete' => __( 'Are you sure?', 'mediacleanse' ),
+        wp_localize_script( 'emetriomediapurge-admin', 'EmetrioMediaPurgeL10n', [
+            'unusedText'    => __( 'Unused media', 'emetriomediapurge' ),
+            'confirmDelete' => __( 'Are you sure?', 'emetriomediapurge' ),
         ] );
     }
 
@@ -477,9 +477,9 @@ class MediaCleanse_Plugin {
      */
     public function add_unused_label_to_list_view($actions, $post) {
         if (self::is_media_unused($post->ID)) {
-            $actions['mediacleanse_status'] = sprintf(
+            $actions['emetriomediapurge_status'] = sprintf(
                 '<span style="color: #ffd700; font-weight: 500; font-size: 13px; pointer-events: none; display: inline-block; margin-top: 4px;">%s</span>',
-                esc_html__( 'Unused Media', 'mediacleanse' )
+                esc_html__( 'Unused Media', 'emetriomediapurge' )
             );
         }
         return $actions;
@@ -490,12 +490,12 @@ class MediaCleanse_Plugin {
      */
     public function add_unused_msg_to_details_sidebar($form_fields, $post) {
         if (self::is_media_unused($post->ID)) {
-            $form_fields['mediacleanse_status'] = [
-                'label' => esc_html__( 'Media Cleanse:', 'mediacleanse' ),
+            $form_fields['emetriomediapurge_status'] = [
+                'label' => esc_html__( 'Emetrio Media Purge:', 'emetriomediapurge' ),
                 'input' => 'html',
                 'html'  => sprintf(
                     '<span style="border-left: 4px solid #ffd700; background: #ffd7001a; padding: 6px 10px; display: inline-block;">%s</span>',
-                    esc_html__( 'Media is not in use, can be cleaned.', 'mediacleanse' )
+                    esc_html__( 'Media is not in use, can be cleaned.', 'emetriomediapurge' )
                 ),
             ];
         }
@@ -504,12 +504,12 @@ class MediaCleanse_Plugin {
 
     public function render_admin_page() {
         $this->clear_unused_cache();
-        $table = new MediaCleanse_List_Table();
+        $table = new EmetrioMediaPurge_List_Table();
         $table->prepare_items();
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline"><?php esc_html_e('Media Cleanse | Emetrio', 'mediacleanse'); ?></h1>
-            <p class="notice notice-warning inline"><strong><?php esc_html_e('Media Cleanse Notice:', 'mediacleanse'); ?></strong> <?php esc_html_e('For safety, please make a full backup of your website and media library before executing any deletions. Deleted media items are permanently removed and cannot be recovered.', 'mediacleanse'); ?></p>
+            <h1 class="wp-heading-inline"><?php esc_html_e('Emetrio Media Purge', 'emetriomediapurge'); ?></h1>
+            <p class="notice notice-warning inline"><strong><?php esc_html_e('Emetrio Media Purge Notice:', 'emetriomediapurge'); ?></strong> <?php esc_html_e('For safety, please make a full backup of your website and media library before executing any deletions. Deleted media items are permanently removed and cannot be recovered.', 'emetriomediapurge'); ?></p>
 
             <?php
             $message = isset( $_GET['message'] ) ? sanitize_text_field( wp_unslash( $_GET['message'] ) ) : '';
@@ -517,18 +517,18 @@ class MediaCleanse_Plugin {
                 <div id="message" class="updated notice is-dismissible"><p>
                     <?php
                         if ( 'deleted' === $message ) {
-                            esc_html_e( 'Item permanently removed.', 'mediacleanse' );
+                            esc_html_e( 'Item permanently removed.', 'emetriomediapurge' );
                         } elseif ( 'bulk_deleted' === $message ) {
-                            esc_html_e( 'Selected items permanently removed.', 'mediacleanse' );
+                            esc_html_e( 'Selected items permanently removed.', 'emetriomediapurge' );
                         }
                     ?>
                 </p></div>
             <?php endif; ?>
 
             <form method="get" action="">
-                <input type="hidden" name="page" value="mediacleanse" />
-                <?php wp_nonce_field('mediacleanse_bulk_delete', 'mediacleanse_bulk_nonce'); ?>
-                <?php $table->search_box(esc_html__('Search Media', 'mediacleanse'), 'search_id'); ?>
+                <input type="hidden" name="page" value="emetriomediapurge" />
+                <?php wp_nonce_field('emetriomediapurge_bulk_delete', 'emetriomediapurge_bulk_nonce'); ?>
+                <?php $table->search_box(esc_html__('Search Media', 'emetriomediapurge'), 'search_id'); ?>
                 <?php $table->display(); ?>
             </form>
         </div>
@@ -536,4 +536,4 @@ class MediaCleanse_Plugin {
     }
 }
 
-new MediaCleanse_Plugin();
+new EmetrioMediaPurge_Plugin();
